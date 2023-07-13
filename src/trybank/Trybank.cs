@@ -105,7 +105,6 @@ public class Trybank
     {
       throw new AccessViolationException("Usuário não está logado");
     }
-    // int userBalance = Bank[loggedUser, 3];
     if (Bank[loggedUser, 3] < value)
     {
       throw new InvalidOperationException("Saldo insuficiente");
@@ -116,7 +115,26 @@ public class Trybank
   // 7. Construa a funcionalidade de transferir dinheiro entre contas
   public void Transfer(int destinationNumber, int destinationAgency, int value)
   {
-    throw new NotImplementedException();
+    if (!Logged)
+    {
+      throw new AccessViolationException("Usuário não está logado");
+    }
+    for (int i = 0; i < registeredAccounts; i++)
+    {
+      int foundAccountNumber = Bank[i, 0];
+      int foundAgency = Bank[i, 1];
+
+      if (foundAccountNumber == destinationNumber && foundAgency == destinationAgency)
+      {
+        if (Bank[loggedUser, 3] < value)
+        {
+          throw new InvalidOperationException("Saldo insuficiente");
+
+        }
+        Bank[loggedUser, 3] -= value;
+        Bank[i, 3] += value;
+      }
+    }
   }
 
 
