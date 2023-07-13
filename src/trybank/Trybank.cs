@@ -42,7 +42,27 @@ public class Trybank
   // 2. Construa a funcionalidade de fazer Login
   public void Login(int number, int agency, int pass)
   {
-    throw new NotImplementedException();
+    if (Logged)
+    {
+      throw new AccessViolationException("Usuário já está logado");
+    }
+    for (int i = 0; i < registeredAccounts; i++)
+    {
+      int foundAccountNumber = Bank[i, 0];
+      int foundAgency = Bank[i, 1];
+      int foundPass = Bank[i, 2];
+      if (foundAccountNumber == number && foundAgency == agency)
+      {
+        if (foundPass == pass)
+        {
+          loggedUser = i;
+          Logged = true;
+          return;
+        }
+        throw new ArgumentException("Senha incorreta");
+      }
+      throw new ArgumentException("Agência + Conta não encontrada");
+    }
   }
 
   // 3. Construa a funcionalidade de fazer Logout
@@ -77,3 +97,5 @@ public class Trybank
 
 
 }
+
+
